@@ -7,7 +7,7 @@ Docker & Docker Compose (For Redis and Postgres)
 Installation & Setup
 Clone the Repository
 
-git clone <repo link>
+git clone git@github.com:Niraj12chaudhary/order-execution-engine.git
 cd order-execution-engine
 
 docker-compose up -d
