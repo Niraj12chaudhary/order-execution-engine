@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyRequest } from "fastify";
 import Redis from "ioredis";
+import { redisConnection } from "../../redis";
 
 export default async function orderWebsocket(app: FastifyInstance) {
   app.get(
@@ -8,8 +9,7 @@ export default async function orderWebsocket(app: FastifyInstance) {
     (connection, req: FastifyRequest) => {
       console.log("Client connected to WebSocket 🔌");
 
-      const redisSub = new Redis({ host: "localhost", port: 6379 });
-
+      const redisSub = new Redis(redisConnection as any);
       redisSub.subscribe("order-updates", (err) => {
         if (err) console.error("Failed to subscribe to Redis", err);
       });

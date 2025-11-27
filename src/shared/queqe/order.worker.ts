@@ -5,8 +5,7 @@ import Redis from "ioredis";
 import { dexService } from "../../config/modules/dex/dex.service";
 
 const prisma = new PrismaClient();
-const redisPub = new Redis({ host: "localhost", port: 6379 });
-
+const redisPub = new Redis(redisConnection as any);
 const processOrder = async (job: Job) => {
   const { orderId, tokenIn, tokenOut, amount } = job.data;
   console.log(`[Worker]  Processing Order: ${orderId}`);
