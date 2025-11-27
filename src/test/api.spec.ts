@@ -13,7 +13,7 @@ describe("Order API Integration", () => {
     await app.close();
   });
 
-  // Test 4: Health Check
+  //  Health Check
   it("should return 200 on root route", async () => {
     const response = await app.inject({
       method: "GET",
@@ -22,7 +22,7 @@ describe("Order API Integration", () => {
     expect(response.statusCode).toBe(200);
   });
 
-  // Test 5: Create Valid Order
+  // Create Valid Order
   it("should create a new order successfully", async () => {
     const payload = {
       type: "MARKET",
@@ -45,7 +45,7 @@ describe("Order API Integration", () => {
     expect(body.data.status).toBe("PENDING");
   });
 
-  // Test 6: Validation Error (Missing Field)
+  //  Validation Error (Missing Field)
   it("should fail if side is missing", async () => {
     const payload = {
       type: "MARKET",
@@ -64,7 +64,7 @@ describe("Order API Integration", () => {
     expect(response.statusCode).toBe(400);
   });
 
-  // Test 7: Validation Error (Negative Amount)
+  //  Validation Error (Negative Amount)
   it("should fail if amount is negative", async () => {
     const payload = {
       type: "MARKET",
@@ -83,7 +83,7 @@ describe("Order API Integration", () => {
     expect(response.statusCode).toBe(400);
   });
 
-  // Test 8: Get Orders List
+  //  Get Orders List
   it("should fetch order history", async () => {
     const response = await app.inject({
       method: "GET",
@@ -94,7 +94,7 @@ describe("Order API Integration", () => {
     expect(Array.isArray(body.data)).toBe(true);
   });
 
-  // Test 9: Invalid Token Input (Empty String)
+  // Invalid Token Input (Empty String)
   it("should fail if tokenIn is empty", async () => {
     const payload = {
       type: "MARKET",
@@ -111,7 +111,7 @@ describe("Order API Integration", () => {
     expect(response.statusCode).toBe(400);
   });
 
-  // Test 10: Invalid Order Type
+  // : Invalid Order Type
   it("should fail if order type is invalid", async () => {
     const payload = {
       type: "SNIPER_PRO_MAX", // Invalid Enum
