@@ -1,0 +1,49 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//Enum
+enum OrderType {
+  MARKET
+  LIMIT
+}
+
+enum OrderSide {
+  BUY
+  SELL
+}
+
+enum OrderStatus {
+  PENDING
+  ROUTING
+  CONFIRMED
+  FAILED
+}
+
+model Order {
+  id             String      @id @default(uuid())
+  
+  
+  type           OrderType   
+  side           OrderSide   
+  
+  tokenIn        String
+  tokenOut       String
+  amount         Float
+  
+  status         OrderStatus @default(PENDING)
+  
+  txHash         String?
+  executionPrice Float?
+  routeUsed      String?
+  errorMsg       String?
+  
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
