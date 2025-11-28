@@ -1,3 +1,27 @@
+ Backend Architecture & Design Decisions
+1. Asynchronous Architecture (Producer-Consumer)
+I designed the system to be non-blocking. Instead of processing orders immediately (which would freeze the API), the server pushes incoming orders into a Redis Queue (BullMQ). Background workers pick them up independently, ensuring the API remains fast and responsive even under heavy load.
+
+2. High-Performance Server (Fastify)
+I chose Fastify over Express because of its superior performance benchmarks and lower overhead. It handles JSON serialization much faster and has excellent native support for WebSockets, which simplified the real-time update logic.
+
+3. Reliability & Type Safety (Prisma + Zod)
+Financial apps can't afford bad data.
+
+Zod validates every request at the door—if the amount is negative or tokens are missing, the request is rejected immediately.
+
+Prisma ORM with PostgreSQL ensures ACID compliance. I used native Enums for order status (PENDING, CONFIRMED) to prevent invalid states from ever entering the database.
+
+4. Smart DEX Routing (Strategy Pattern)
+To handle routing logic, I used the Strategy Pattern. The worker queries multiple DEXs (Raydium & Meteora) concurrently using Promise.all. It compares the quotes in real-time and automatically executes the trade on the venue offering the best price, simulating real-world aggregation.
+
+5. Real-Time Updates (Redis Pub/Sub)
+Since the Worker (processing the order) and the WebSocket Server (connected to the user) run separately, they don't share memory. I used Redis Pub/Sub as a bridge. The worker publishes an event when a status changes, and the WebSocket server listens to it and instantly pushes the update to the client.
+
+6. Scalable Infrastructure (Docker)
+The entire backend is containerized using Docker. This separates the API service, the Background Worker, and the Database into their own isolated environments, mimicking a production microservices setup.
+
+
 Prerequisites:
 
 Node.js (v18+)
